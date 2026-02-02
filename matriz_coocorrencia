@@ -1,0 +1,47 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from google.colab import files
+
+filename = next(iter(uploaded))
+
+try:
+    df = pd.read_csv(filename, sep=';')
+except:
+    # Fallback caso o separador seja vírgula
+    df = pd.read_csv(filename, sep=',')
+
+colunas_interesse = ['art_1.1', 'art_4', 'art_5', 'art_8', 'art_25']
+df_numerico = df[colunas_interesse]
+
+# CÁLCULO MATEMÁTICO DA MATRIZ
+# Transforma em matriz numpy
+X = df_numerico.values
+# Multiplicação de Matrizes (Transposta * Original) para achar a coocorrência
+cooccurrence_matrix = np.dot(X.T, X)
+
+# PREPARAÇÃO DOS RÓTULOS
+labels = ["Art. 1.1", "Art. 4\n(Vida)", "Art. 5\n(Integridade)", 
+          "Art. 8\n(Garantias)", "Art. 25\n(Proteção)"]
+
+# GERAÇÃO DO GRÁFICO (HEATMAP)
+plt.figure(figsize=(10, 8))
+ax = sns.heatmap(cooccurrence_matrix, 
+                 annot=True,       
+                 fmt='d',          
+                 cmap='Reds',      
+                 xticklabels=labels, 
+                 yticklabels=labels,
+                 cbar=False,       
+                 annot_kws={"size": 14, "weight": "bold"}) 
+
+plt.xticks(rotation=0, fontsize=11)
+plt.yticks(rotation=0, fontsize=11)
+plt.tight_layout()
+
+plt.savefig('matriz_coocorrencia_dissertacao.png', dpi=300)
+files.download('matriz_coocorrencia_dissertacao.png')
+
+print("Gráfico gerado e download iniciado!")
+plt.show()
