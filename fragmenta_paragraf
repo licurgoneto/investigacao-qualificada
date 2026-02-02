@@ -1,0 +1,30 @@
+import glob
+import re
+import os
+output_file = "corte_idh_fragmentado.ris"
+file_paths = glob.glob("*.txt")
+print(f"Encontrados {len(file_paths)} arquivos. Iniciando processamento...")
+def clean_text(text):
+    text = re.sub(r'(?<!\n)\n(?!\n)', ' ', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+count_paragraphs = 0
+with open(output_file, "w", encoding="utf-8") as out:
+    for path in file_paths:
+        filename = os.path.basename(path)
+        year_match = re.search(r'\d{4}', filename)
+        year = year_match.group(0) if year_match else "S.D."
+        case_name = filename.replace(".txt", "").replace("_", " ")
+        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+            paragraphs = re.split(r'\n\s*\n', content)
+            for i, p in enumerate(paragraphs):
+                clean_p = clean_text(p)
+                if len(clean_p) > 100:
+                    count_paragraphs += 1
+                    out.write("TY  - JOUR\n") # Tipo: Journal (genérico)
+                    out.write(f"TI  - {case_name} - Part {i+1}\n")
+                    out.write(f"AB  - {clean_p}\n")
+                    out.write("AU  - Corte Interamericana de Direitos Humanos\n")
+                    out.write(f"PY  - {year}\n")
+                    out.write("ER  - \n\n")
