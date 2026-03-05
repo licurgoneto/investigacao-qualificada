@@ -1,5 +1,4 @@
-# investigacao-qualificada
-# 📊 A Arquitetura Probabilística da Elucidação de Homicídios: Análise de Dados da Polícia Civil (PCRN)
+# 📊 A Qualificação da investigação criminal no Rio Grande do Norte: fatores determinantes para a elucidação de homicídios
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
